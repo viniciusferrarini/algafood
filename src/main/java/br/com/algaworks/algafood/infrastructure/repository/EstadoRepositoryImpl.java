@@ -28,6 +28,7 @@ public class EstadoRepositoryImpl implements EstadoRepository {
     }
 
     @Override
+    @Transactional
     public Estado salvar(Estado estado) {
         return entityManager.merge(estado);
     }
