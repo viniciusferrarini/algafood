@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/estados")
@@ -32,16 +33,13 @@ public class EstadoController {
 
     @GetMapping
     public List<Estado> listar() {
-        return estadoRepository.listar();
+        return estadoRepository.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Estado> buscar(@PathVariable Long id) {
-        Estado estado = estadoRepository.buscar(id);
-        if (estado != null) {
-            return ResponseEntity.ok(estado);
-        }
-        return ResponseEntity.notFound().build();
+        Optional<Estado> estado = estadoRepository.findById(id);
+        return estado.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
@@ -57,10 +55,11 @@ public class EstadoController {
     @PutMapping("/{id}")
     public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody Estado estado) {
         try {
-            Estado estadoAtual = estadoRepository.buscar(id);
-            if (estadoAtual != null) {
+            Optional<Estado> estadoAtualOptional = estadoRepository.findById(id);
+            if (estadoAtualOptional.isPresent()) {
+                Estado estadoAtual = estadoAtualOptional.get();
                 BeanUtils.copyProperties(estado, estadoAtual, "id");
-                estadoAtual = estadoRepository.salvar(estadoAtual);
+                estadoAtual = estadoRepository.save(estadoAtual);
                 return ResponseEntity.ok(estadoAtual);
             }
             return ResponseEntity.notFound().build();
