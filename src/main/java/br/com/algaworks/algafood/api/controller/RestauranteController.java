@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -85,6 +86,21 @@ public class RestauranteController {
 
         return ResponseEntity.notFound().build();
 
+    }
+
+    @GetMapping("/taxa-inicial/{taxaInicial}/taxa-final/{taxaFinal}")
+    public List<Restaurante> buscaPorTaxaEntre(@PathVariable BigDecimal taxaInicial, @PathVariable BigDecimal taxaFinal) {
+        return restauranteRepository.findByTaxaFreteBetween(taxaInicial, taxaFinal);
+    }
+
+    @GetMapping("/frete-gratis/nome/{nome}")
+    public List<Restaurante> buscaRestaurantePorNomeComFreteGratis(@PathVariable String nome) {
+        return restauranteRepository.findComFreteGratis(nome);
+    }
+
+    @GetMapping("/primeiro")
+    public Optional<Restaurante> buscarPrimeiro() {
+        return restauranteRepository.buscarPrimeiro();
     }
 
     public void merge(Map<String, Object> camposOrigem, Restaurante restauranteDestino) {
