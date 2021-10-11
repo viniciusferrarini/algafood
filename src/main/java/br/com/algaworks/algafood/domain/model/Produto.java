@@ -1,7 +1,6 @@
 package br.com.algaworks.algafood.domain.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,9 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Getter @Setter
-public class Cidade {
+public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +25,17 @@ public class Cidade {
     @Column(nullable = false)
     private String nome;
 
+    @Column
+    private String descricao;
+
+    @Column(nullable = false)
+    private BigDecimal preco;
+
+    @Column(nullable = false)
+    private boolean ativo;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
-    private Estado estado;
+    @JoinColumn(name = "restaurante_id")
+    private Restaurante restaurante;
 
 }

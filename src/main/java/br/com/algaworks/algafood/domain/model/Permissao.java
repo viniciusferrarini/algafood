@@ -21,6 +21,7 @@ public class Permissao {
     @Column(nullable = false)
     private String nome;
 
+    @Column
     private String descricao;
 
     @Override
