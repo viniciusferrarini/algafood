@@ -1,12 +1,8 @@
 package br.com.algaworks.algafood.api.controller;
 
-import br.com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
-import br.com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
-import br.com.algaworks.algafood.domain.model.Estado;
-import br.com.algaworks.algafood.domain.repository.EstadoRepository;
-import br.com.algaworks.algafood.domain.service.CadastroEstadoService;
+import java.util.List;
+
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,20 +12,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Optional;
+import br.com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
+import br.com.algaworks.algafood.domain.model.Estado;
+import br.com.algaworks.algafood.domain.repository.EstadoRepository;
+import br.com.algaworks.algafood.domain.service.CadastroEstadoService;
 
 @RestController
 @RequestMapping("/estados")
 public class EstadoController {
 
-    @Autowired
-    private EstadoRepository estadoRepository;
+    private final EstadoRepository estadoRepository;
 
-    @Autowired
-    private CadastroEstadoService cadastroEstado;
+    private final CadastroEstadoService cadastroEstado;
+
+    public EstadoController(EstadoRepository estadoRepository, CadastroEstadoService cadastroEstado) {
+        this.estadoRepository = estadoRepository;
+        this.cadastroEstado = cadastroEstado;
+    }
 
     @GetMapping
     public List<Estado> listar() {
@@ -37,9 +39,8 @@ public class EstadoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Estado> buscar(@PathVariable Long id) {
-        Optional<Estado> estado = estadoRepository.findById(id);
-        return estado.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public Estado buscar(@PathVariable Long id) {
+        return cadastroEstado.buscarOuFalhar(id);
     }
 
     @PostMapping
@@ -53,37 +54,16 @@ public class EstadoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody Estado estado) {
-        try {
-            Optional<Estado> estadoAtualOptional = estadoRepository.findById(id);
-            if (estadoAtualOptional.isPresent()) {
-                Estado estadoAtual = estadoAtualOptional.get();
-                BeanUtils.copyProperties(estado, estadoAtual, "id");
-                estadoAtual = estadoRepository.save(estadoAtual);
-                return ResponseEntity.ok(estadoAtual);
-            }
-            return ResponseEntity.notFound().build();
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public Estado atualizar(@PathVariable Long id, @RequestBody Estado estado) {
+        Estado estadoAtual = cadastroEstado.buscarOuFalhar(id);
+        BeanUtils.copyProperties(estado, estadoAtual, "id");
+        return estadoRepository.save(estadoAtual);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Estado> delete(@PathVariable Long id) {
-        try {
-            cadastroEstado.excluir(id);
-            return ResponseEntity
-                    .noContent()
-                    .build();
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity
-                    .notFound()
-                    .build();
-        } catch (EntidadeEmUsoException e) {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .build();
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        cadastroEstado.excluir(id);
     }
 
 }
