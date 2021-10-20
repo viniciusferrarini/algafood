@@ -12,6 +12,7 @@ import br.com.algaworks.algafood.domain.repository.CidadeRepository;
 public class CadastroCidadeService {
 
     public static final String CIDADE_NAO_ENCONTRADA = "Cidade de código %d não encontrada";
+
     private final CadastroEstadoService cadastroEstado;
     private final CidadeRepository cidadeRepository;
 

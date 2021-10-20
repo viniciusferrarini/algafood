@@ -25,7 +25,6 @@ import br.com.algaworks.algafood.domain.service.CadastroCidadeService;
 public class CidadeController {
 
     private final CidadeRepository cidadeRepository;
-
     private final CadastroCidadeService cadastroCidade;
 
     public CidadeController(CidadeRepository cidadeRepository, CadastroCidadeService cadastroCidade) {

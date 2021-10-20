@@ -8,7 +8,6 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
@@ -30,11 +29,13 @@ import br.com.algaworks.algafood.domain.service.CadastroRestauranteService;
 @RequestMapping("/restaurantes")
 public class RestauranteController {
 
-    @Autowired
-    private RestauranteRepository restauranteRepository;
+    private final RestauranteRepository restauranteRepository;
+    private final CadastroRestauranteService cadastroRestaurante;
 
-    @Autowired
-    private CadastroRestauranteService cadastroRestaurante;
+    public RestauranteController(RestauranteRepository restauranteRepository, CadastroRestauranteService cadastroRestaurante) {
+        this.restauranteRepository = restauranteRepository;
+        this.cadastroRestaurante = cadastroRestaurante;
+    }
 
     @GetMapping
     public List<Restaurante> listar() {

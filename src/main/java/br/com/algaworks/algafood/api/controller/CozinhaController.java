@@ -23,7 +23,6 @@ import br.com.algaworks.algafood.domain.service.CadastroCozinhaService;
 public class CozinhaController {
 
     private final CozinhaRepository cozinhaRepository;
-
     private final CadastroCozinhaService cadastroCozinha;
 
     public CozinhaController(CozinhaRepository cozinhaRepository, CadastroCozinhaService cadastroCozinha) {

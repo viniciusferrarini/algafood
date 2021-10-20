@@ -25,7 +25,6 @@ import br.com.algaworks.algafood.domain.service.CadastroEstadoService;
 public class EstadoController {
 
     private final EstadoRepository estadoRepository;
-
     private final CadastroEstadoService cadastroEstado;
 
     public EstadoController(EstadoRepository estadoRepository, CadastroEstadoService cadastroEstado) {
