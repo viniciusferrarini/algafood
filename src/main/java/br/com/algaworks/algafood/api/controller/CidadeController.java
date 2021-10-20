@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algaworks.algafood.domain.model.Cidade;
-import br.com.algaworks.algafood.domain.model.Cozinha;
 import br.com.algaworks.algafood.domain.repository.CidadeRepository;
 import br.com.algaworks.algafood.domain.service.CadastroCidadeService;
 
@@ -60,17 +60,9 @@ public class CidadeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Cozinha> delete(@PathVariable Long id) {
-        try {
-            cadastroCidade.excluir(id);
-            return ResponseEntity
-                    .noContent()
-                    .build();
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity
-                    .notFound()
-                    .build();
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        cadastroCidade.excluir(id);
     }
 
 }
