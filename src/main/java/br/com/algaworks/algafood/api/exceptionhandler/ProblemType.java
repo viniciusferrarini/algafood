@@ -11,9 +11,9 @@ public enum ProblemType {
     ENTIDADE_EM_USO("/entidade-em-uso", "Entidade em uso", HttpStatus.CONFLICT),
     NEGOCIO("/erro-de-negocio", "Erro de negócio", HttpStatus.BAD_REQUEST);
 
-    private String title;
-    private String uri;
-    private HttpStatus status;
+    private final String title;
+    private final String uri;
+    private final HttpStatus status;
 
     ProblemType(String path, String title, HttpStatus status) {
         this.uri = "https://algafood.com.br" + path;
