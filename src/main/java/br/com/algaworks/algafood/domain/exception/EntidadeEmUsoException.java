@@ -1,6 +1,6 @@
 package br.com.algaworks.algafood.domain.exception;
 
-public class EntidadeEmUsoException extends RuntimeException {
+public abstract class EntidadeEmUsoException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
